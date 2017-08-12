@@ -1,0 +1,36 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="avatar-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    /**
+     * `avatar-element`
+     * Universal avatar element that makes it possible to fetch / generate avatar from different sources ( Facebook, Google, Gravatar, Initials, etc)
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class AvatarElement extends Polymer.Element {
+      static get is() { return 'avatar-element'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'avatar-element'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(AvatarElement.is, AvatarElement);
+  </script>
+</dom-module>

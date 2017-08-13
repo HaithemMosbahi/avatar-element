@@ -3,11 +3,19 @@
 <dom-module id="avatar-element">
   <template>
     <style>
-      :host {
+       :host {
         display: block;
+        --avatar-radius: 50%;
+        --avatar-size: 150px;
+      }
+
+      img {
+        border-radius: var(--avatar-radius);
+        width: var(--avatar-size);
+        height: var(--avatar-size);
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+    <img id="avatarImg">
   </template>
 
   <script>
@@ -26,9 +34,62 @@
           prop1: {
             type: String,
             value: 'avatar-element'
-          }
+          },
+          round: {
+            type: String,
+            value: true
+          },
+          size: {
+            type: Number,
+            value: 50
+          },
+          textSizeRatio: {
+            type: Number,
+            value: 3
+          },
+          cornerRadius: {
+            type: Number,
+            value: 3
+          },
+          bgColor: String,
+          fgColor: String,
+          borderColor: String,
+          facebookId: String,
+          googleId: String,
+          twitterId: String,
+          githubId: String,
+          skypeId: String,
+          gravatarId: String,
+          vkontakteId: String,
+          src: String,
+          name: String,
+          value: String,
+          _currentSource: {
+            type: Number,
+            value: 0
+          },
+          _sources: {
+            type: Array,
+            value: []
+          },
+          _src: String
         };
       }
+      static get observers() {
+        return [
+          '_sourceChanged(facebookId, googleId,twitterId)'
+        ]
+      }
+      ready() {
+        super.ready();
+      }
+
+      _sourceChanged(facebookId, googleId,twitterId){
+        console.log('source has been changed ');
+      }
+    
+
+
     }
 
     window.customElements.define(AvatarElement.is, AvatarElement);

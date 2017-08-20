@@ -15,7 +15,7 @@
         height: var(--avatar-size);
       }
     </style>
-    <img id="avatarImg">
+    <img id="avatarImg" on-error="_fetchHasFailed">
   </template>
 
   <script>
@@ -54,16 +54,46 @@
           bgColor: String,
           fgColor: String,
           borderColor: String,
-          facebookId: String,
-          googleId: String,
-          twitterId: String,
-          githubId: String,
-          skypeId: String,
-          gravatarId: String,
-          vkontakteId: String,
-          src: String,
-          name: String,
-          value: String,
+          facebookId: {
+            type: String,
+            observer: '_facebookIdChanged'
+          },
+          googleId: {
+            type: String,
+            observer: '_googleIdChanged'
+          },
+          twitterId: {
+            type: String,
+            observer: '_twitterIdChanged'
+          },
+          githubId: {
+            type: String,
+            observer: '_githubIdChanged'
+          },
+          skypeId: {
+            type: String,
+            observer: '_skypeIdChanged'
+          },
+          gravatarId: {
+            type: String,
+            observer: '_gravatarIdChanged'
+          },
+          vkontakteId: {
+            type: String,
+            observer: '_vkontakteIdChanged'
+          },
+          src: {
+            type: String,
+            observer: '_srcChanged'
+          },
+          name: {
+            type: String,
+            observer: '_nameChanged'
+          },
+          value: {
+            type: String,
+            observer: '_valueChanged'
+          },
           _currentSource: {
             type: Number,
             value: 0
@@ -82,12 +112,64 @@
       }
       ready() {
         super.ready();
+        this.$.avatarImg.src = this._sources[this._currentSource];
       }
 
-      _sourceChanged(facebookId, googleId,twitterId){
+      _sourceChanged(facebookId, googleId, twitterId) {
         console.log('source has been changed ');
       }
-    
+
+      /**
+      * Observer for the facebookId property
+      *
+      **/
+      _facebookIdChanged(newValue, oldValue) {
+        this._sources.push({
+          sourceId: newValue,
+          getAvatar() {
+            return 'https://graph.facebook.com/' +
+              `${newValue}/picture?width=${this.size}&height=${this.size}`;
+          }
+        })
+      }
+      /**
+       * Observer for the googleId property
+       *
+       **/
+      _googleIdChanged(newValue, oldValue) {
+        this._sources.push({
+          sourceId: newValue,
+          getAvatar() {
+            return ``
+          }
+        });
+      }
+      /**
+      * Observer for the twitterId property
+      *
+      **/
+      _twitterIdChanged(newValue, oldValue) {
+        this._sources.push({
+          sourceId: newValue,
+          getAvatar() {
+            return `https://twitter.com/${newValue}/profile_image?size=original`
+          }
+        })
+      }
+
+      /**
+      * Called when fetching avatar source fails.
+      * It handles the fallback system and provides the next source.
+      **/
+      _fetchHasFailed() {
+        console.log("Fetching avatar has failed ! ");
+        this._currentSource++;
+        if (this._sources.length < this._currentSource + 1) {
+          this.$.avatarImg.src = this._sources[this._currentSource];
+        }
+
+      }
+
 
 
     }
